@@ -9,13 +9,10 @@ from pathlib import Path
 # 📂 Rutas
 # ============================================================
 
-# Detecta automáticamente la raíz del proyecto (buscando la carpeta "data")
-BASE_DIR = Path(__file__).resolve()
-while not (BASE_DIR / "data").exists() and BASE_DIR != BASE_DIR.parent:
-    BASE_DIR = BASE_DIR.parent
+BASE_DIR = Path(__file__).resolve().parent
 
 DATA_PROCESSED = BASE_DIR / "data" / "processed"
-DATA_PROCESSED.mkdir(parents=True, exist_ok=True)  # 👈 crea la carpeta si no existe
+DATA_PROCESSED.mkdir(parents=True, exist_ok=True)
 
 REPORTS_DIR = BASE_DIR / "reports"
 REPORTS_DIR.mkdir(parents=True, exist_ok=True)

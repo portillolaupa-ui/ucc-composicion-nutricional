@@ -6,8 +6,8 @@ import streamlit as st
 import pandas as pd
 from pathlib import Path
 from io import BytesIO
-from utils.clean_recetas_calculo import procesar_excel_recetas
-from utils.calculo_nutricional_recetas import calcular_info_nutricional
+from clean_recetas_calculo import limpiar_recetas as procesar_excel_recetas
+from calculo_nutricional_recetas import calcular_info_nutricional
 
 
 # ============================================================
@@ -187,11 +187,19 @@ def to_internal(cols_display: list[str]) -> list[str]:
 uploaded_file = st.sidebar.file_uploader("Cargar archivo de recetas", type=["xlsx"])
 
 if uploaded_file:
-    df_uploaded = pd.read_excel(uploaded_file)
-    temp_path = DATA_PROCESSED / "recetas_calculo_clean.xlsx"
+    # Guarda temporalmente el archivo subido
+    temp_path = DATA_PROCESSED / "recetas_calculo.xlsx"
     temp_path.parent.mkdir(parents=True, exist_ok=True)
-    df_uploaded.to_excel(temp_path, index=False)
+    with open(temp_path, "wb") as f:
+        f.write(uploaded_file.getbuffer())
+
     st.sidebar.success("✅ Archivo cargado correctamente")
+
+    # 🔹 Ejecuta la limpieza y genera el CSV limpio
+    with st.spinner("🧼 Limpiando archivo de recetas..."):
+        df_clean = procesar_excel_recetas(temp_path)
+        st.session_state["df_clean"] = df_clean
+        st.sidebar.success("✅ Archivo limpio generado correctamente")
 
 if st.sidebar.button("🔄 Calcular información nutricional"):
     with st.spinner("Calculando información nutricional..."):

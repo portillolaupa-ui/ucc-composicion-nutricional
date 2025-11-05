@@ -9,7 +9,7 @@ from io import StringIO
 # ============================================================
 # 📂 Configuración de rutas
 # ============================================================
-BASE_DIR = Path(__file__).resolve().parents[2]
+BASE_DIR = Path(__file__).resolve().parent
 DATA_RAW = BASE_DIR / "data" / "raw"
 DATA_PROCESSED = BASE_DIR / "data" / "processed"
 REPORTS_DIR = BASE_DIR / "reports"
